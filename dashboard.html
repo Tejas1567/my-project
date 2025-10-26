@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EarnApp Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --primary: #8A2BE2;        /* Deep Purple */
+      --secondary: #FF416C;       /* Pink */
+      --accent: #FFD700;          /* Gold */
+      --success: #00FFA3;         /* Neon Green */
+      --dark: #0F0C29;
+      --darker: #09071A;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      color: white;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .header {
+      background: rgba(138, 43, 226, 0.2);
+      backdrop-filter: blur(12px);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+    }
+    .user-greeting h2 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin: 0;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .user-greeting p {
+      margin: 0.3rem 0 0;
+      color: #B0A9C9;
+      font-size: 0.95rem;
+    }
+    .balance-box {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem;
+      text-align: right;
+      min-width: 140px;
+    }
+    .balance-amount {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(90deg, white, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .balance-label {
+      font-size: 0.9rem;
+      color: #B0A9C9;
+      margin: 0.2rem 0 0;
+    }
+    .feature-card {
+      background: rgba(25, 20, 45, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 1.8rem;
+      margin: 1.2rem 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 36px rgba(138, 43, 226, 0.4);
+      border-color: rgba(138, 43, 226, 0.4);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 65, 108, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      animation: rotate 15s linear infinite;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .feature-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      color: white;
+    }
+    .feature-icon {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .play-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0.9rem 1.8rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: all 0.25s;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .play-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 16px rgba(255, 65, 108, 0.4);
+    }
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #B0A9C9;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover {
+      color: var(--accent);
+      transform: rotate(90deg);
+    }
+    .claimed-badge {
+      background: rgba(0, 255, 163, 0.15);
+      color: #00FFA3;
+      padding: 0.3rem 0.9rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 0.8rem;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #ff0;
+      border-radius: 50%;
+      animation: fall 5s linear forwards;
+      z-index: 9999;
+    }
+    @keyframes fall {
+      to { 
+        transform: translateY(100vh) rotate(360deg); 
+        opacity: 0; 
+      }
+    }
+    .withdrawal-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--primary);
+    }
+    .status-badge {
+      padding: 0.25rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-requested { background: rgba(255, 170, 0, 0.2); color: #FFD700; }
+    .status-approved { background: rgba(0, 255, 163, 0.2); color: #00FFA3; }
+    .status-paid { background: rgba(0, 201, 255, 0.2); color: #00C9FF; }
+    .status-rejected { background: rgba(255, 77, 77, 0.2); color: #FF4D4D; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .balance-box {
+        min-width: auto;
+      }
+      .user-greeting h2 {
+        font-size: 1.4rem;
+      }
+      .balance-amount {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="user-greeting">
+      <div>
+        <h2>Hey, <span id="userName">User</span>! 🎉</h2>
+        <p>Welcome back to EarnApp</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1.2rem;">
+      <div class="balance-box">
+        <p class="balance-label">Your Balance</p>
+        <h3 class="balance-amount">₹<span id="rupeeBalance">0</span></h3>
+        <p class="balance-label"><span id="coinBalance">0</span> coins</p>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Logout">
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid px-4 py-3">
+    <!-- Daily Bonus -->
+    <div class="feature-card" id="dailyBonusCard">
+      <div class="feature-title">
+        <i class="bi bi-gift feature-icon"></i> Daily Bonus
+      </div>
+      <p>🎁 Claim 100 coins every day! Come back tomorrow for more.</p>
+      <div id="dailyStatus"></div>
+      <button class="play-btn" id="openDailyModal">
+        <i class="bi bi-calendar-check"></i> <span id="dailyBtnText">Claim Bonus</span>
+      </button>
+    </div>
+
+    <!-- Refer & Earn -->
+    <div class="feature-card" data-bs-toggle="modal" data-bs-target="#referModal">
+      <div class="feature-title">
+        <i class="bi bi-people feature-icon"></i> Refer & Earn
+      </div>
+      <p>Invite friends and earn 100 coins instantly when they join!</p>
+      <button class="play-btn" style="background: linear-gradient(135deg, #00C9FF, #92FE9D); color: #0D0B1A;">
+        <i class="bi bi-share"></i> Invite Friends
+      </button>
+    </div>
+
+    <!-- Withdraw Cash -->
+    <div class="feature-card" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+      <div class="feature-title">
+        <i class="bi bi-cash-coin feature-icon"></i> Withdraw Cash
+      </div>
+      <p>100 coins = ₹1 • Minimum withdrawal: ₹1</p>
+      <button class="play-btn" style="background: linear-gradient(135deg, #FFD700, #FFAA00); color: #0D0B1A;">
+        <i class="bi bi-wallet2"></i> Withdraw Now
+      </button>
+    </div>
+
+    <!-- Withdrawal History -->
+    <div class="feature-card">
+      <div class="feature-title">
+        <i class="bi bi-clock-history feature-icon" style="background: linear-gradient(135deg, #00C9FF, #00FFA3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> Withdrawal History
+      </div>
+      <div id="withdrawalList">
+        <p class="text-muted text-center">Loading history...</p>
+      </div>
+    </div>
+
+    <!-- Spin & Win -->
+    <div class="feature-card">
+      <div class="feature-title">
+        <i class="bi bi-arrow-clockwise feature-icon" style="background: linear-gradient(135deg, #9D4EDD, #FF416C); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> Spin & Win
+      </div>
+      <p>Win up to 50 coins per spin! Try your luck now.</p>
+      <button class="play-btn" id="spinBtn">
+        <i class="bi bi-play-fill"></i> SPIN NOW
+      </button>
+    </div>
+
+    <!-- Scratch Card -->
+    <div class="feature-card">
+      <div class="feature-title">
+        <i class="bi bi-ticket-perforated feature-icon" style="background: linear-gradient(135deg, #00FFA3, #00C9FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> Scratch Card
+      </div>
+      <p>Reveal hidden rewards! Scratch to win coins.</p>
+      <button class="play-btn" id="scratchBtn" style="background: linear-gradient(135deg, #00FFA3, #00C9FF);">
+        <i class="bi bi-eraser"></i> SCRATCH NOW
+      </button>
+    </div>
+  </div>
+
+  <!-- DAILY BONUS MODAL -->
+  <div class="modal fade" id="dailyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: rgba(25, 20, 45, 0.9); border: 1px solid rgba(138, 43, 226, 0.3);">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h5 class="modal-title" style="color: white;">🎉 Daily Bonus</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center" style="padding: 2.5rem;">
+          <div class="mb-4">
+            <i class="bi bi-gift" style="font-size: 4.5rem; background: linear-gradient(90deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+          </div>
+          <h3 style="font-family: 'Poppins', sans-serif; font-weight: 700; margin-bottom: 1rem;">Claim Your 100 Coins!</h3>
+          <p style="color: #B0A9C9; margin-bottom: 2rem;">Available once per day. Come back tomorrow for more!</p>
+          <button class="btn" id="claimDailyBonus" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.9rem 2rem; font-weight: 700; font-size: 1.2rem; border-radius: 50px; width: 100%;">
+            ✅ Claim 100 Coins
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFER MODAL -->
+  <div class="modal fade" id="referModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: rgba(25, 20, 45, 0.9); border: 1px solid rgba(0, 201, 255, 0.3);">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h5 class="modal-title" style="color: white;">Invite Friends</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="padding: 2rem;">
+          <p style="color: #B0A9C9;">Share your code below. You and your friend get <strong>100 coins</strong> when they sign up!</p>
+          <div class="bg-dark text-light p-3 rounded mb-3 text-center" id="referralCodeDisplay" style="font-family: monospace; font-size: 1.3rem; letter-spacing: 1px;">Loading...</div>
+          <div class="d-grid gap-2">
+            <button class="btn" id="copyReferralCode" style="background: linear-gradient(135deg, #00C9FF, #92FE9D); color: #0D0B1A; font-weight: 600;">
+              <i class="bi bi-clipboard"></i> Copy Code
+            </button>
+            <button class="btn btn-outline-light" id="shareReferral">
+              <i class="bi bi-share"></i> Share Link
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITHDRAWAL MODAL -->
+  <div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: rgba(25, 20, 45, 0.9); border: 1px solid rgba(255, 170, 0, 0.3);">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h5 class="modal-title" style="color: white;">Withdraw Cash</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="padding: 2rem;">
+          <p style="color: #B0A9C9;">100 coins = ₹1. Minimum withdrawal: ₹1.</p>
+          <div class="mb-3">
+            <label class="form-label" style="color: white; font-weight: 500;">Amount (₹)</label>
+            <input type="number" class="form-control" id="withdrawAmount" min="1" placeholder="e.g. 10" value="1" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white;">
+            <div class="form-text text-muted">You need <span id="requiredCoins">100</span> coins for this.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color: white; font-weight: 500;">UPI ID</label>
+            <input type="text" class="form-control" id="upiId" placeholder="yourname@upi" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white;">
+          </div>
+          <button class="btn w-100" id="requestWithdrawal" style="background: linear-gradient(135deg, #FFD700, #FFAA00); color: #0D0B1A; font-weight: 600; padding: 0.8rem; border-radius: 12px;">
+            Request Withdrawal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Container -->
+  <div id="confetti-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔥 REPLACE WITH YOUR CONFIG
+      const firebaseConfig = {
+  apiKey: "AIzaSyDPJTWyFVmKfqbCKABmgwVBMAq3ztUh-c0",
+  authDomain: "earning-app-7aaa2.firebaseapp.com",
+  databaseURL: "https://earning-app-7aaa2-default-rtdb.firebaseio.com",
+  projectId: "earning-app-7aaa2",
+  storageBucket: "earning-app-7aaa2.firebasestorage.app",
+  messagingSenderId: "275234274991",
+  appId: "1:275234274991:web:e35845916bc1932f6e9e5a",
+  measurementId: "G-2YNNENL1RZ"
+   };
+    
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    const userNameEl = document.getElementById('userName');
+    const coinBalanceEl = document.getElementById('coinBalance');
+    const rupeeBalanceEl = document.getElementById('rupeeBalance');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const referralCodeDisplay = document.getElementById('referralCodeDisplay');
+    const dailyStatusEl = document.getElementById('dailyStatus');
+    const dailyBtnTextEl = document.getElementById('dailyBtnText');
+    const openDailyModalBtn = document.getElementById('openDailyModal');
+    const withdrawAmountInput = document.getElementById('withdrawAmount');
+    const requiredCoinsEl = document.getElementById('requiredCoins');
+    const withdrawalListEl = document.getElementById('withdrawalList');
+
+    withdrawAmountInput.addEventListener('input', () => {
+      const amount = parseInt(withdrawAmountInput.value) || 0;
+      requiredCoinsEl.textContent = amount * 100;
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'auth.html';
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user || !user.emailVerified) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      currentUser = user;
+      const name = user.displayName || user.email.split('@')[0];
+      userNameEl.textContent = name;
+
+      await loadUserData();
+      await loadWithdrawalHistory();
+    });
+
+    async function loadUserData() {
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (!userDoc.exists()) return;
+
+      const data = userDoc.data();
+      const coins = data.balance || 0;
+      const rupees = Math.floor(coins / 100);
+      coinBalanceEl.textContent = coins;
+      rupeeBalanceEl.textContent = rupees;
+      referralCodeDisplay.textContent = data.referralCode || 'REF123';
+
+      // Daily Bonus Status
+      const today = new Date().toISOString().split('T')[0];
+      const lastClaimed = data.lastDailyBonus || '';
+      const canClaim = lastClaimed !== today;
+
+      if (canClaim) {
+        dailyBtnTextEl.textContent = 'Claim Bonus';
+        dailyStatusEl.innerHTML = '';
+        openDailyModalBtn.disabled = false;
+      } else {
+        dailyBtnTextEl.textContent = 'Claimed Today';
+        dailyStatusEl.innerHTML = '<div class="claimed-badge">✅ Claimed Today</div>';
+        openDailyModalBtn.disabled = true;
+      }
+    }
+
+    async function loadWithdrawalHistory() {
+      withdrawalListEl.innerHTML = '<p class="text-muted text-center">Loading...</p>';
+      try {
+        const q = query(collection(db, 'withdrawals'), where('userId', '==', currentUser.uid), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+          withdrawalListEl.innerHTML = '<p class="text-muted text-center">No withdrawals yet.</p>';
+          return;
+        }
+        let html = '';
+        querySnapshot.forEach(doc => {
+          const w = doc.data();
+          const date = w.createdAt ? new Date(w.createdAt.seconds * 1000).toLocaleDateString() : '—';
+          const statusClass = {
+            'requested': 'status-requested',
+            'approved': 'status-approved',
+            'paid': 'status-paid',
+            'rejected': 'status-rejected'
+          }[w.status] || 'status-requested';
+          html += `
+            <div class="withdrawal-item">
+              <div class="d-flex justify-content-between">
+                <strong>₹${w.amount || 0}</strong>
+                <span class="status-badge ${statusClass}">${w.status?.toUpperCase() || 'UNKNOWN'}</span>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="bi bi-upi"></i> ${w.details || '—'} • ${date}
+              </div>
+            </div>
+          `;
+        });
+        withdrawalListEl.innerHTML = html;
+      } catch (error) {
+        withdrawalListEl.innerHTML = '<p class="text-danger text-center">Failed to load history.</p>';
+      }
+    }
+
+    // Daily Bonus Modal
+    openDailyModalBtn.addEventListener('click', () => {
+      const today = new Date().toISOString().split('T')[0];
+      getDoc(doc(db, 'users', currentUser.uid)).then((doc) => {
+        if (doc.exists() && doc.data().lastDailyBonus === today) {
+          alert('You already claimed your bonus today!');
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('dailyModal'));
+          modal.show();
+        }
+      });
+    });
+
+    // Claim Daily Bonus
+    document.getElementById('claimDailyBonus').addEventListener('click', async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const currentCoins = parseInt(coinBalanceEl.textContent) || 0;
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          balance: currentCoins + 100,
+          lastDailyBonus: today,
+          updatedAt: serverTimestamp()
+        });
+        createConfetti();
+        setTimeout(() => {
+          alert('🎉 100 coins added to your account!');
+          location.reload();
+        }, 1000);
+      } catch (e) {
+        alert('Failed to claim bonus.');
+      }
+    });
+
+    function createConfetti() {
+      const container = document.getElementById('confetti-container');
+      container.innerHTML = '';
+      const colors = ['#FFD700', '#FF416C', '#8A2BE2', '#00C9FF', '#00FFA3'];
+      for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 5 + 's';
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = confetti.style.width;
+        container.appendChild(confetti);
+      }
+    }
+
+    // Refer & Earn
+    document.getElementById('copyReferralCode').addEventListener('click', async () => {
+      const code = referralCodeDisplay.textContent;
+      if (code === 'Loading...') return;
+      try {
+        await navigator.clipboard.writeText(code);
+        const currentCoins = parseInt(coinBalanceEl.textContent) || 0;
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          balance: currentCoins + 100,
+          updatedAt: serverTimestamp()
+        });
+        alert('✅ Code copied! 100 coins added!');
+        location.reload();
+      } catch (e) {
+        alert('Failed to copy code.');
+      }
+    });
+
+    document.getElementById('shareReferral').addEventListener('click', () => {
+      const link = `${window.location.origin}/?ref=${referralCodeDisplay.textContent}`;
+      if (navigator.share) {
+        navigator.share({ title: 'Join EarnApp!', url: link });
+      } else {
+        navigator.clipboard.writeText(link).then(() => alert('Link copied!'));
+      }
+    });
+
+    // Withdrawal
+    document.getElementById('requestWithdrawal').addEventListener('click', async () => {
+      const amountInRupees = parseInt(withdrawAmountInput.value);
+      const upiId = document.getElementById('upiId').value.trim();
+      const currentCoins = parseInt(coinBalanceEl.textContent) || 0;
+
+      if (!amountInRupees || amountInRupees < 1) {
+        alert('Minimum withdrawal: ₹1');
+        return;
+      }
+      if (!upiId || !upiId.includes('@')) {
+        alert('Please enter a valid UPI ID.');
+        return;
+      }
+      const requiredCoins = amountInRupees * 100;
+      if (currentCoins < requiredCoins) {
+        alert(`You need ${requiredCoins} coins. Balance: ${currentCoins} coins.`);
+        return;
+      }
+      if (!confirm(`Withdraw ₹${amountInRupees} (${requiredCoins} coins) to ${upiId}?`)) return;
+
+      try {
+        await addDoc(collection(db, 'withdrawals'), {
+          userId: currentUser.uid,
+          method: 'UPI',
+          details: upiId,
+          amount: amountInRupees,
+          amountInCoins: requiredCoins,
+          status: 'requested',
+          createdAt: serverTimestamp()
+        });
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          balance: currentCoins - requiredCoins,
+          withdrawalPending: (parseInt((await getDoc(doc(db, 'users', currentUser.uid))).data().withdrawalPending || 0)) + amountInRupees,
+          updatedAt: serverTimestamp()
+        });
+        alert(`✅ Withdrawal request for ₹${amountInRupees} submitted!`);
+        await loadWithdrawalHistory();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('withdrawModal'));
+        modal.hide();
+      } catch (error) {
+        alert("Failed to process withdrawal.");
+      }
+    });
+
+    // Other features
+    document.getElementById('spinBtn').addEventListener('click', async () => {
+      const coins = parseInt(coinBalanceEl.textContent) || 0;
+      await updateDoc(doc(db, 'users', currentUser.uid), { balance: coins + 10, updatedAt: serverTimestamp() });
+      alert('🎉 +10 coins!');
+      location.reload();
+    });
+
+    document.getElementById('scratchBtn').addEventListener('click', async () => {
+      const coins = parseInt(coinBalanceEl.textContent) || 0;
+      await updateDoc(doc(db, 'users', currentUser.uid), { balance: coins + 10, updatedAt: serverTimestamp() });
+      alert('✅ +10 coins!');
+      location.reload();
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

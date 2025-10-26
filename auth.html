@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EarnApp – Sign Up / Login</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --primary: #8e24aa;
+      --primary-dark: #6a1b9a;
+      --secondary: #e53935;
+      --gradient: linear-gradient(135deg, var(--secondary), var(--primary));
+      --card-bg: #ffffff;
+      --text-dark: #2d2d2d;
+      --border-radius: 20px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9f7ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 0;
+      /* Start visible — no hiding */
+    }
+
+    .auth-container {
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      background: var(--gradient);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .brand-subtitle {
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(142, 36, 170, 0.15);
+      padding: 2.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--gradient);
+    }
+
+    /* Rest of styles */
+    .nav-pills .nav-link {
+      font-weight: 600;
+      color: #555;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .nav-pills .nav-link.active {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 12px rgba(142, 36, 170, 0.25);
+    }
+
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.15);
+    }
+
+    .password-strength {
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .btn-auth {
+      background: var(--gradient);
+      border: none;
+      padding: 0.85rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      border-radius: 14px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-auth:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .footer-text a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth UI is VISIBLE by default -->
+  <div class="auth-container">
+    <div class="brand-header">
+      <div class="brand-logo">💰</div>
+      <h1 class="brand-title">EarnApp</h1>
+      <p class="brand-subtitle">Start earning real cash today!</p>
+    </div>
+
+    <div class="auth-card">
+      <ul class="nav nav-pills mb-4 justify-content-center" id="authTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup">Sign Up</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="login-tab" data-bs-toggle="tab" data-bs-target="#login">Login</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="forgot-tab" data-bs-toggle="tab" data-bs-target="#forgot">Forgot?</button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <!-- SIGN UP -->
+        <div class="tab-pane fade show active" id="signup" role="tabpanel">
+          <form id="signupForm">
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="signupName" required minlength="2">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="signupEmail" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mobile Number</label>
+              <input type="tel" class="form-control" id="signupPhone" required pattern="[6-9][0-9]{9}">
+              <div class="form-text">10-digit Indian mobile number</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="signupPassword" required minlength="6">
+                <button type="button" class="toggle-password" id="toggleSignupPass">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength">
+                <div class="password-strength-bar" id="passwordStrengthBar"></div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-auth w-100">Create Account</button>
+          </form>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="tab-pane fade" id="login" role="tabpanel">
+          <form id="loginForm">
+            <div class="mb-3">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="loginEmail" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="loginPassword" required>
+                <button type="button" class="toggle-password" id="toggleLoginPass">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-auth w-100">Login to Account</button>
+          </form>
+        </div>
+
+        <!-- FORGOT PASSWORD -->
+        <div class="tab-pane fade" id="forgot" role="tabpanel">
+          <form id="forgotForm">
+            <div class="mb-3">
+              <label class="form-label">Your Email</label>
+              <input type="email" class="form-control" id="forgotEmail" required>
+              <div class="form-text">We’ll send a password reset link.</div>
+            </div>
+            <button type="submit" class="btn btn-auth w-100">Send Reset Link</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-text">
+        By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      sendEmailVerification,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔥 REPLACE WITH YOUR FIREBASE CONFIG
+    const firebaseConfig = {
+  apiKey: "AIzaSyDPJTWyFVmKfqbCKABmgwVBMAq3ztUh-c0",
+  authDomain: "earning-app-7aaa2.firebaseapp.com",
+  databaseURL: "https://earning-app-7aaa2-default-rtdb.firebaseio.com",
+  projectId: "earning-app-7aaa2",
+  storageBucket: "earning-app-7aaa2.firebasestorage.app",
+  messagingSenderId: "275234274991",
+  appId: "1:275234274991:web:e35845916bc1932f6e9e5a",
+  measurementId: "G-2YNNENL1RZ"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ✅ CRITICAL: Check auth state AFTER page loads
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.emailVerified) {
+        // Redirect ONLY if verified
+        window.location.replace('dashboard.html');
+      }
+      // If not logged in or not verified → do nothing (UI already visible)
+    });
+
+    // Toggle password
+    document.getElementById('toggleSignupPass').addEventListener('click', () => togglePassword('signupPassword'));
+    document.getElementById('toggleLoginPass').addEventListener('click', () => togglePassword('loginPassword'));
+
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      const icon = input.nextElementSibling.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+      }
+    }
+
+    document.getElementById('signupPassword').addEventListener('input', () => {
+      const pass = document.getElementById('signupPassword').value;
+      let strength = 0;
+      if (pass.length >= 6) strength += 25;
+      if (/[A-Z]/.test(pass)) strength += 25;
+      if (/[0-9]/.test(pass)) strength += 25;
+      if (/[^A-Za-z0-9]/.test(pass)) strength += 25;
+
+      const bar = document.getElementById('passwordStrengthBar');
+      bar.style.width = `${strength}%`;
+      bar.style.backgroundColor = 
+        strength < 50 ? '#ef5350' : 
+        strength < 75 ? '#ff9800' : '#4caf50';
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const phone = document.getElementById('signupPhone').value.trim();
+      const password = document.getElementById('signupPassword').value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCredential.user);
+
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          name,
+          email,
+          phone,
+          emailVerified: false,
+          createdAt: new Date().toISOString(),
+          balance: 0,
+          referralCode: 'REF' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+          role: "user",
+          lastDailyBonus: "",
+          spinsUsedToday: 0,
+          scratchesUsedToday: 0,
+          withdrawalPending: 0
+        });
+
+        alert("✅ Account created! Please check your email to verify your address.");
+        document.getElementById('signupForm').reset();
+        document.getElementById('passwordStrengthBar').style.width = '0%';
+      } catch (error) {
+        let msg = error.message;
+        if (msg.includes('email-already-in-use')) msg = "This email is already registered.";
+        else if (msg.includes('invalid-email')) msg = "Please enter a valid email.";
+        else if (msg.includes('weak-password')) msg = "Password must be at least 6 characters.";
+        alert("❌ " + msg);
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (!user.emailVerified) {
+          alert("📧 Please verify your email first! Check your inbox for the verification link.");
+          await auth.signOut();
+          return;
+        }
+
+        window.location.replace('dashboard.html');
+      } catch (error) {
+        let msg = error.message;
+        if (msg.includes('user-not-found') || msg.includes('wrong-password')) {
+          msg = "Invalid email or password.";
+        }
+        alert("❌ " + msg);
+      }
+    });
+
+    document.getElementById('forgotForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('forgotEmail').value.trim();
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert("✅ Password reset link sent! Check your email (including spam folder).");
+        document.getElementById('forgotForm').reset();
+      } catch (error) {
+        let msg = error.message;
+        if (msg.includes('user-not-found')) msg = "No account found with this email.";
+        alert("❌ " + msg);
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
